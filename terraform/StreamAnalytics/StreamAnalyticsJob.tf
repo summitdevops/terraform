@@ -12,10 +12,8 @@ resource "azurerm_stream_analytics_job" "streamAnalyticsJob" {
   output_error_policy                      = var.output-error-policy
   streaming_units                          = var.streaming-units
   transformation_query                     = var.transformation-query
-  #Comment the below line and uncomment the other one while testing
-  #tags                                     = var.tags
+  tags                                     = var.tags
 
-  tags = merge(zipmap(split(",", var.keys), split(",", var.values)))
 }
 
 
