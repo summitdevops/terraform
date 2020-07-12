@@ -1,0 +1,67 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appconfigName": {
+            "defaultValue": "test2appconfig",
+            "type": "String"
+        },
+        "appConfigLocation": {
+            "defaultValue": "eastus",
+            "type": "String"
+        },
+        "appConfigSKU": {
+            "defaultValue": "standard",
+            "type": "String"
+        },
+        "identity": {
+                "type": "string"
+        },
+        "enableEncryption": {
+            "type": "string",
+
+            "allowedValues": ["true", "false"]
+        },
+        "encriptionKey": {
+            "type": "string"
+        },
+        "userAssignedIdentityClientId": {
+            "type": "string"
+        },
+        "identityType": {
+            "type": "string"
+        }
+        
+    },
+    "variables": {
+        "key": "[parameters('encriptionKey')]",
+        "clientID": "[parameters('userAssignedIdentityClientId')]"
+
+    },
+    "resources": [
+        {
+            "type": "Microsoft.AppConfiguration/configurationStores",
+            "apiVersion": "2019-11-01-preview",
+            "name": "[parameters('appconfigName')]",
+            "location": "[parameters('appConfigLocation')]",
+            "tags": {
+                "test": "env"
+            },
+            "sku": {
+                "name": "[parameters('appConfigSKU')]"
+            },
+            "identity": "[json(parameters('identity'))]",
+            
+            "properties": 
+            {
+                "encryption": {
+                    "keyVaultProperties": {
+                        "keyIdentifier": "[if(equals(parameters('enableEncryption'), 'true'), variables('key'), json('null'))]",
+                        "identityClientId": "[if(equals(parameters('identityType'), 'UserAssigned'), variables('clientID'), json('null'))]"
+                        
+                    }
+                }
+            }
+        }
+    ]
+}
