@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/en-us/azure/traffic-manager/traffic-manager-overview
 #################################################################################
 module "traffic-manager" {
-    source = "../Ref.Cloud.Azure.Golden.TrafficManager"
+    source = "Module/TrafficManager"
 
     # App service Parameters
     enable-app-service              = var.usr-enable-app-service
